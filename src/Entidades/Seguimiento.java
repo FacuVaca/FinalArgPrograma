@@ -18,7 +18,7 @@ public class Seguimiento {
     private LocalDate fecha;
     private double medidaPecho, medidaCintura, medidaCadera;
     private double peso;
-
+    private int idDieta;
     public Seguimiento() {
     }
 
@@ -30,7 +30,15 @@ public class Seguimiento {
         this.medidaCadera = medidaCadera;
         this.peso = peso;
     }
-
+    public Seguimiento(Paciente paciente, LocalDate fecha, double medidaPecho, double medidaCintura, double medidaCadera, double peso,int idDieta) {
+        this.paciente = paciente;
+        this.fecha = fecha;
+        this.medidaPecho = medidaPecho;
+        this.medidaCintura = medidaCintura;
+        this.medidaCadera = medidaCadera;
+        this.peso = peso;
+        this.idDieta=idDieta;
+    }
     public Seguimiento(int idSeguimiento, Paciente paciente, LocalDate fecha, double medidaPecho, double medidaCintura, double medidaCadera, double peso) {
         this.idSeguimiento = idSeguimiento;
         this.paciente = paciente;
@@ -76,7 +84,6 @@ public class Seguimiento {
     public double getMedidaCintura() {
         return medidaCintura;
     }
-
     public void setMedidaCintura(double medidaCintura) {
         this.medidaCintura = medidaCintura;
     }
@@ -84,7 +91,6 @@ public class Seguimiento {
     public double getMedidaCadera() {
         return medidaCadera;
     }
-
     public void setMedidaCadera(double medidaCadera) {
         this.medidaCadera = medidaCadera;
     }
@@ -92,11 +98,16 @@ public class Seguimiento {
     public double getPeso() {
         return peso;
     }
-
     public void setPeso(double peso) {
         this.peso = peso;
     }
-
+    
+    public int getIdDieta(){
+        return idDieta;
+    }
+    public void setIdDieta(int idDieta){
+    this.idDieta=idDieta;
+    }
     @Override
     public String toString() {
         return idSeguimiento + ", " + paciente;

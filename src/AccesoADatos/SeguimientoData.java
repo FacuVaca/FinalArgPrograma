@@ -49,7 +49,7 @@ public class SeguimientoData {
                         JOptionPane.showMessageDialog(null, "No se pueden agregar seguimientos en una fecha que coincide con una dieta existente.");
                     } else {
 
-                        String sqlInsertar = "INSERT INTO Seguimiento (idPaciente, fecha, medidaPecho, medidaCintura, medidaCadera, peso) VALUES (?,?,?,?,?,?)";
+                        String sqlInsertar = "INSERT INTO Seguimiento (idPaciente, fecha, medidaPecho, medidaCintura, medidaCadera, peso,idDieta) VALUES (?,?,?,?,?,?,?)";
                         try (PreparedStatement psInsertar = con.prepareStatement(sqlInsertar)) {
                             psInsertar.setInt(1, idPaciente);
                             psInsertar.setDate(2, Date.valueOf(seguimiento.getFecha()));
@@ -57,7 +57,7 @@ public class SeguimientoData {
                             psInsertar.setDouble(4, seguimiento.getMedidaCintura());
                             psInsertar.setDouble(5, seguimiento.getMedidaCadera());
                             psInsertar.setDouble(6, seguimiento.getPeso());
-
+                            psInsertar.setInt(7, seguimiento.getIdDieta());
                             int filasModificadas = psInsertar.executeUpdate();
                             if (filasModificadas == 1) {
                                 JOptionPane.showMessageDialog(null, "El seguimiento ha sido añadido con éxito");
@@ -418,12 +418,14 @@ public class SeguimientoData {
 
     }
 
-    public boolean modificarSeguimiento(int idPaciente, Seguimiento seguimiento) {
+ public boolean modificarSeguimiento(int idPaciente, Seguimiento seguimiento) {
 
         boolean actual = false;
 
+        int idSeguimiento= seguimiento.getIdSeguimiento();
+        
         try {
-            String sql = "UPDATE Seguimiento SET fecha=?, medidaPecho=?, medidaCintura=?, medidaCadera=? WHERE idPaciente=?";
+            String sql = "UPDATE Seguimiento SET fecha=?, medidaPecho=?, medidaCintura=?, medidaCadera=? WHERE idPaciente=? AND idSeguimiento=?";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setDate(1, Date.valueOf(seguimiento.getFecha()));
@@ -431,7 +433,7 @@ public class SeguimientoData {
             ps.setDouble(3, seguimiento.getMedidaCintura());
             ps.setDouble(4, seguimiento.getMedidaCadera());
             ps.setInt(5, idPaciente);
-
+            ps.setInt(6, idSeguimiento);
             int exito = ps.executeUpdate();
 
             if (exito == 1) {
@@ -447,6 +449,31 @@ public class SeguimientoData {
         return actual;
     }
 
+
+public int obtenerIdSeguimientoPorFechaYPaciente(int idPaciente, LocalDate fechaInicial, LocalDate fechaFinal) {
+    int idSeguimiento = -1;
+
+    try {
+        String sql = "SELECT idSeguimiento FROM Seguimiento WHERE idPaciente = ? AND fecha >= ? AND fecha <= ?";
+
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, idPaciente);
+        ps.setDate(2, Date.valueOf(fechaInicial));
+        ps.setDate(3, Date.valueOf(fechaFinal));
+
+        ResultSet resultado = ps.executeQuery();
+
+        if (resultado.next()) {
+            idSeguimiento = resultado.getInt("idSeguimiento");
+        }
+
+        ps.close();
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(null, "Error al obtener el ID de seguimiento: " + ex.getMessage());
+    }
+
+    return idSeguimiento;
+}
     public boolean objetivoCumplidoParaPaciente(Dieta dieta, Paciente paciente) {
         LocalDate fechaMasReciente = encontrarFechaMasReciente(paciente.getIdPaciente());
 
@@ -461,5 +488,19 @@ public class SeguimientoData {
 
         return false;
     }
-
+    public int ultimoDieta(){
+                String sql="SELECT MAX(idDieta) AS idDieta from dieta ";
+            int idDieta=0;
+           try {
+                PreparedStatement ps = con.prepareStatement(sql);
+                ResultSet resultado = ps.executeQuery();
+                while (resultado.next()){
+                    idDieta=resultado.getInt("idDieta");
+                }
+                return idDieta;
+           } catch (SQLException ex) {
+                   JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
+           }
+           return idDieta;
+    }
 }

@@ -142,12 +142,51 @@ public class DietaData {
         return pacientes;
     }
 
-    public boolean modificarDieta(int idPaciente, Dieta dieta) {
+ public Dieta obtenerUnaDietaPorPersonaYidDieta(int idPaciente, int idDieta) {
+    Dieta dieta = null;
 
+    try {
+        String sql = "SELECT idDieta, nombre, idPaciente, fechaInicial, pesoInicial, pesoFinal, fechaFinal, altura FROM dieta WHERE idPaciente=? AND idDieta=?";
+
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, idPaciente);
+        ps.setInt(2, idDieta);
+        ResultSet resultado = ps.executeQuery();
+
+        if (resultado.next()) {
+            dieta = new Dieta();
+
+            dieta.setIdDieta(resultado.getInt("idDieta"));
+            dieta.setNombre(resultado.getString("nombre"));
+
+            PacienteData pacienteData = new PacienteData();
+            idPaciente = resultado.getInt("idPaciente");
+            dieta.setPaciente(pacienteData.obtenerPacientePorId(idPaciente));
+
+            dieta.setFechaInicial(resultado.getDate("fechaInicial").toLocalDate());
+            dieta.setPesoInicial(resultado.getDouble("pesoInicial"));
+            dieta.setPesoFinal(resultado.getDouble("pesoFinal"));
+            dieta.setFechaFinal(resultado.getDate("fechaFinal").toLocalDate());
+            dieta.setAltura(resultado.getDouble("altura"));
+        }
+
+        ps.close();
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(null, "No se pudieron obtener los datos de la tabla inscripcion" + ex);
+    } catch (NullPointerException ex) {
+        JOptionPane.showMessageDialog(null, "No se pudieron obtener los datos" + ex.getMessage());
+    }
+
+    return dieta;
+}
+ public boolean modificarDieta(int idPaciente, Dieta dieta) {
+
+        int idDieta= dieta.getIdDieta();
+        
         boolean actual = false;
 
         try {
-            String sql = "UPDATE dieta SET fechaInicial=?, pesoInicial=?, pesoFinal=?, fechaFinal=? WHERE idPaciente=?";
+            String sql = "UPDATE dieta SET fechaInicial=?, pesoInicial=?, pesoFinal=?, fechaFinal=? WHERE idPaciente=? AND idDieta=?";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setDate(1, Date.valueOf(dieta.getFechaInicial()));
@@ -155,6 +194,7 @@ public class DietaData {
             ps.setDouble(3, dieta.getPesoFinal());
             ps.setDate(4, Date.valueOf(dieta.getFechaFinal()));
             ps.setInt(5, idPaciente);
+            ps.setInt(6, idDieta);
             int exito = ps.executeUpdate();
 
             if (exito == 1) {
@@ -170,12 +210,13 @@ public class DietaData {
         return actual;
     }
 
-    public void borrarDietaPorID(int idDieta) {
+    public void borrarDietaPorID(int idDieta,int idPaciente) {
         try {
-            String sql = "DELETE FROM dieta WHERE idDieta = ?";
+            String sql = "DELETE FROM dieta WHERE idDieta = ? and idPaciente=?";
 
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, idDieta);
+            ps.setInt(2, idPaciente);
             int exito = ps.executeUpdate();
             if (exito > 0) {
                 JOptionPane.showMessageDialog(null, "La Dieta se elimino correctamente");
