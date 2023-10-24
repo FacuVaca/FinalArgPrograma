@@ -683,7 +683,7 @@ System.out.println(pacientea);
         
         
         if (p != null) {
-            int idPaciente = p.getIdPaciente();
+           
             
             DietaData dietaData = new DietaData();
             Dieta dieta = new Dieta(nombre, p, fechaInicial, pesoInicial, pesoFinal, fechaFinal, altura);

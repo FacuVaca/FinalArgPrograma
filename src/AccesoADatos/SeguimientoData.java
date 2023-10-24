@@ -1,4 +1,3 @@
-
 package AccesoADatos;
 
 import java.sql.Connection;
@@ -10,14 +9,10 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import Entidades.Paciente;
 import java.sql.Date;
-import AccesoADatos.PacienteData;
 import Entidades.Comida;
 import Entidades.Dieta;
-
 import Entidades.Seguimiento;
-import java.sql.Statement;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,77 +25,76 @@ public class SeguimientoData {
 
     }
 
-public void AgregarSeguimiento(Seguimiento seguimiento) {
-    try {
-        if (seguimiento == null || seguimiento.getPaciente() == null) {
-            JOptionPane.showMessageDialog(null, "Datos de seguimiento incorrectos.");
-            return;
-        }
+    public void AgregarSeguimiento(Seguimiento seguimiento) {
+        try {
+            if (seguimiento == null || seguimiento.getPaciente() == null) {
+                JOptionPane.showMessageDialog(null, "Datos de seguimiento incorrectos.");
+                return;
+            }
 
-        LocalDate fechaSeguimiento = seguimiento.getFecha();
-        int idPaciente = seguimiento.getPaciente().getIdPaciente();
+            LocalDate fechaSeguimiento = seguimiento.getFecha();
+            int idPaciente = seguimiento.getPaciente().getIdPaciente();
 
-      
-        String sqlVerificarDieta = "SELECT COUNT(*) FROM Dieta WHERE idPaciente = ? AND (? BETWEEN fechaInicial AND fechaFinal OR ? BETWEEN fechaInicial AND fechaFinal)";
-        try (PreparedStatement psVerificarDieta = con.prepareStatement(sqlVerificarDieta)) {
-            psVerificarDieta.setInt(1, idPaciente);
-            psVerificarDieta.setDate(2, Date.valueOf(fechaSeguimiento));
-            psVerificarDieta.setDate(3, Date.valueOf(fechaSeguimiento));
+            String sqlVerificarDieta = "SELECT COUNT(*) FROM Dieta WHERE idPaciente = ? AND (? BETWEEN fechaInicial AND fechaFinal OR ? BETWEEN fechaInicial AND fechaFinal)";
+            try (PreparedStatement psVerificarDieta = con.prepareStatement(sqlVerificarDieta)) {
+                psVerificarDieta.setInt(1, idPaciente);
+                psVerificarDieta.setDate(2, Date.valueOf(fechaSeguimiento));
+                psVerificarDieta.setDate(3, Date.valueOf(fechaSeguimiento));
 
-            ResultSet rs = psVerificarDieta.executeQuery();
-            if (rs.next()) {
-                int dietasExisten = rs.getInt(1);
+                ResultSet rs = psVerificarDieta.executeQuery();
+                if (rs.next()) {
+                    int dietasExisten = rs.getInt(1);
 
-                if (dietasExisten > 1) {
-                    JOptionPane.showMessageDialog(null, "No se pueden agregar seguimientos en una fecha que coincide con una dieta existente.");
-                } else {
-                 
-                    String sqlInsertar = "INSERT INTO Seguimiento (idPaciente, fecha, medidaPecho, medidaCintura, medidaCadera, peso) VALUES (?,?,?,?,?,?)";
-                    try (PreparedStatement psInsertar = con.prepareStatement(sqlInsertar)) {
-                        psInsertar.setInt(1, idPaciente);
-                        psInsertar.setDate(2, Date.valueOf(seguimiento.getFecha()));
-                        psInsertar.setDouble(3, seguimiento.getMedidaPecho());
-                        psInsertar.setDouble(4, seguimiento.getMedidaCintura());
-                        psInsertar.setDouble(5, seguimiento.getMedidaCadera());
-                        psInsertar.setDouble(6, seguimiento.getPeso());
+                    if (dietasExisten > 1) {
+                        JOptionPane.showMessageDialog(null, "No se pueden agregar seguimientos en una fecha que coincide con una dieta existente.");
+                    } else {
 
-                        int filasModificadas = psInsertar.executeUpdate();
-                        if (filasModificadas == 1) {
-                            JOptionPane.showMessageDialog(null, "El seguimiento ha sido añadido con éxito");
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Error al agregar el seguimiento");
+                        String sqlInsertar = "INSERT INTO Seguimiento (idPaciente, fecha, medidaPecho, medidaCintura, medidaCadera, peso) VALUES (?,?,?,?,?,?)";
+                        try (PreparedStatement psInsertar = con.prepareStatement(sqlInsertar)) {
+                            psInsertar.setInt(1, idPaciente);
+                            psInsertar.setDate(2, Date.valueOf(seguimiento.getFecha()));
+                            psInsertar.setDouble(3, seguimiento.getMedidaPecho());
+                            psInsertar.setDouble(4, seguimiento.getMedidaCintura());
+                            psInsertar.setDouble(5, seguimiento.getMedidaCadera());
+                            psInsertar.setDouble(6, seguimiento.getPeso());
+
+                            int filasModificadas = psInsertar.executeUpdate();
+                            if (filasModificadas == 1) {
+                                JOptionPane.showMessageDialog(null, "El seguimiento ha sido añadido con éxito");
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Error al agregar el seguimiento");
+                            }
                         }
                     }
                 }
             }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al establecer la conexión o ejecutar la consulta: " + ex.getMessage());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Error inesperado: " + ex.getMessage());
         }
-    } catch (SQLException ex) {
-        JOptionPane.showMessageDialog(null, "Error al establecer la conexión o ejecutar la consulta: " + ex.getMessage());
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(null, "Error inesperado: " + ex.getMessage());
     }
-}
 
-public boolean verificarSeguimientoExistente(Paciente paciente, LocalDate fecha) {
-    try {
-        String sqlVerificarSeguimiento = "SELECT COUNT(*) FROM Seguimiento WHERE idPaciente = ? AND fecha = ?";
-        try (PreparedStatement psVerificarSeguimiento = con.prepareStatement(sqlVerificarSeguimiento)) {
-            psVerificarSeguimiento.setInt(1, paciente.getIdPaciente());
-            psVerificarSeguimiento.setDate(2, Date.valueOf(fecha));
+    public boolean verificarSeguimientoExistente(Paciente paciente, LocalDate fecha) {
+        try {
+            String sqlVerificarSeguimiento = "SELECT COUNT(*) FROM Seguimiento WHERE idPaciente = ? AND fecha = ?";
+            try (PreparedStatement psVerificarSeguimiento = con.prepareStatement(sqlVerificarSeguimiento)) {
+                psVerificarSeguimiento.setInt(1, paciente.getIdPaciente());
+                psVerificarSeguimiento.setDate(2, Date.valueOf(fecha));
 
-            ResultSet rs = psVerificarSeguimiento.executeQuery();
-            if (rs.next()) {
-                int seguimientosExisten = rs.getInt(1);
-                return seguimientosExisten > 0;
+                ResultSet rs = psVerificarSeguimiento.executeQuery();
+                if (rs.next()) {
+                    int seguimientosExisten = rs.getInt(1);
+                    return seguimientosExisten > 0;
+                }
             }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al verificar la existencia del seguimiento: " + ex.getMessage());
         }
-    } catch (SQLException ex) {
-        JOptionPane.showMessageDialog(null, "Error al verificar la existencia del seguimiento: " + ex.getMessage());
+        return false;
     }
-    return false;
-}
 
-    public Seguimiento ObtenerSeguimientoPorID(int id) {
+    public Seguimiento ObtenerSeguimientoPorID(int idSeguimiento) {
 
         Seguimiento seguimiento = null;
 
@@ -109,7 +103,7 @@ public boolean verificarSeguimientoExistente(Paciente paciente, LocalDate fecha)
 
             PreparedStatement ps = con.prepareStatement(sql);
 
-            ps.setInt(1, id);
+            ps.setInt(1, idSeguimiento);
 
             ResultSet resultado = ps.executeQuery();
 
@@ -118,7 +112,7 @@ public boolean verificarSeguimientoExistente(Paciente paciente, LocalDate fecha)
                 seguimiento = new Seguimiento();
                 PacienteData pacientedata = new PacienteData();
 
-                seguimiento.setIdSeguimiento(id);
+                seguimiento.setIdSeguimiento(idSeguimiento);
                 int idPaciente = resultado.getInt("idPaciente");
                 seguimiento.setPaciente(pacientedata.obtenerPacientePorId(idPaciente));
                 seguimiento.setFecha(resultado.getDate("fecha").toLocalDate());
@@ -139,12 +133,12 @@ public boolean verificarSeguimientoExistente(Paciente paciente, LocalDate fecha)
 
     }
 
-    public void eliminarSeguimientoPorId(int id) {
+    public void eliminarSeguimientoPorId(int idSeguimiento) {
 
         try {
             String sql = "DELETE FROM seguimiento WHERE idSeguimiento=?";
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, id);
+            ps.setInt(1, idSeguimiento);
             int exito = ps.executeUpdate();
             if (exito == 1) {
                 JOptionPane.showMessageDialog(null, "Seguimiento dado de baja");
@@ -156,12 +150,12 @@ public boolean verificarSeguimientoExistente(Paciente paciente, LocalDate fecha)
         }
     }
 
-    public void eliminarSeguimiento(int id, int idSeguimiento) {
+    public void eliminarSeguimiento(int idPaciente, int idSeguimiento) {
 
         try {
             String sql = "DELETE FROM seguimiento WHERE idPaciente=? And idSeguimiento=?";
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, id);
+            ps.setInt(1, idPaciente);
             ps.setInt(2, idSeguimiento);
             int exito = ps.executeUpdate();
             if (exito == 1) {
@@ -174,7 +168,7 @@ public boolean verificarSeguimientoExistente(Paciente paciente, LocalDate fecha)
         }
     }
 
-    public List<Seguimiento> obtenerSeguimientoPorPersona(int id) {
+    public List<Seguimiento> obtenerSeguimientoPorPersona(int idPaciente) {
 
         List<Seguimiento> pacientes = new ArrayList<>();
 
@@ -184,7 +178,7 @@ public boolean verificarSeguimientoExistente(Paciente paciente, LocalDate fecha)
             String sql = "SELECT idSeguimiento,idPaciente,fecha, medidaPecho ,medidaCintura ,medidaCadera FROM seguimiento WHERE idPaciente=?";
 
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, id);
+            ps.setInt(1, idPaciente);
             ResultSet resultado = ps.executeQuery();
             Seguimiento seguimiento;
 
@@ -193,9 +187,9 @@ public boolean verificarSeguimientoExistente(Paciente paciente, LocalDate fecha)
                 pacientedata = new PacienteData();
 
                 seguimiento.setIdSeguimiento(resultado.getInt("idSeguimiento"));
-                seguimiento.setIdSeguimiento(id);
-                int idPaciente = resultado.getInt("idPaciente");
-                seguimiento.setPaciente(pacientedata.obtenerPacientePorId(idPaciente));
+                seguimiento.setIdSeguimiento(idPaciente);
+                int idPaciente1 = resultado.getInt("idPaciente");
+                seguimiento.setPaciente(pacientedata.obtenerPacientePorId(idPaciente1));
                 seguimiento.setFecha(resultado.getDate("fecha").toLocalDate());
                 seguimiento.setMedidaPecho(resultado.getDouble("medidaPecho"));
                 seguimiento.setMedidaCintura(resultado.getDouble("medidaCintura"));
@@ -212,28 +206,26 @@ public boolean verificarSeguimientoExistente(Paciente paciente, LocalDate fecha)
         return pacientes;
     }
 
-    public LocalDate encontrarFechaMasReciente(int id) {
-    String sql = "SELECT fecha FROM SEGUIMIENTO WHERE idPaciente=? ORDER BY fecha DESC";
-    LocalDate fecha = null;
+    public LocalDate encontrarFechaMasReciente(int idPaciente) {
+        String sql = "SELECT fecha FROM SEGUIMIENTO WHERE idPaciente=? ORDER BY fecha DESC";
+        LocalDate fecha = null;
 
-    try {
-        PreparedStatement ps = con.prepareStatement(sql);
-        ps.setInt(1, id);
-        ResultSet resultado = ps.executeQuery();
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, idPaciente);
+            ResultSet resultado = ps.executeQuery();
 
-        if (resultado.next()) {
-            fecha = resultado.getDate("fecha").toLocalDate();
+            if (resultado.next()) {
+                fecha = resultado.getDate("fecha").toLocalDate();
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener la fecha más reciente de seguimiento: " + e.getMessage());
         }
-    } catch (SQLException e) {
-        System.out.println("Error al obtener la fecha más reciente de seguimiento: " + e.getMessage());
+
+        return fecha;
     }
 
-    return fecha;
-}
-
-
-
-    public double CalcularIMCFinal(int id) {
+    public double CalcularIMCFinal(int idPaciente) {
 
         double IMCFinal = 0;
 
@@ -242,7 +234,7 @@ public boolean verificarSeguimientoExistente(Paciente paciente, LocalDate fecha)
         try {
             PreparedStatement ps = con.prepareStatement(sql);
 
-            ps.setInt(1, id);
+            ps.setInt(1, idPaciente);
 
             ResultSet resultado = ps.executeQuery();
 
@@ -261,7 +253,7 @@ public boolean verificarSeguimientoExistente(Paciente paciente, LocalDate fecha)
 
     }
 
-    public double CalcularIMCInicial(int id) {
+    public double CalcularIMCInicial(int idPaciente) {
 
         double IMCInicial = 0;
 
@@ -270,7 +262,7 @@ public boolean verificarSeguimientoExistente(Paciente paciente, LocalDate fecha)
         try {
             PreparedStatement ps = con.prepareStatement(sql);
 
-            ps.setInt(1, id);
+            ps.setInt(1, idPaciente);
 
             ResultSet resultado = ps.executeQuery();
 
@@ -289,101 +281,93 @@ public boolean verificarSeguimientoExistente(Paciente paciente, LocalDate fecha)
 
     }
 
- public List<Paciente> ObjetivoNoCumplido(Dieta dieta) {
-    PacienteData pacienteData = new PacienteData();
-    List<Paciente> ListaPacientes = pacienteData.ListarPacientes();
-    List<Paciente> pacientesNoCumplidos = new ArrayList<>();
+    public List<Paciente> ObjetivoNoCumplido(Dieta dieta) {
+        PacienteData pacienteData = new PacienteData();
+        List<Paciente> ListaPacientes = pacienteData.ListarPacientes();
+        List<Paciente> pacientesNoCumplidos = new ArrayList<>();
 
-    for (Paciente pac : ListaPacientes) {
-        if (!objetivoCumplidoParaPaciente(dieta, pac)) {
-            pacientesNoCumplidos.add(pac);
+        for (Paciente pac : ListaPacientes) {
+            if (!objetivoCumplidoParaPaciente(dieta, pac)) {
+                pacientesNoCumplidos.add(pac);
+            }
         }
+
+        return pacientesNoCumplidos;
     }
-
-    return pacientesNoCumplidos;
-}
-
 
     public List<Paciente> ObjetivoCumplido(Dieta dieta) {
 
         PacienteData pacienteData = new PacienteData();
-        
-        List<Paciente>ListaPacientes= pacienteData.ListarPacientes();
-        
-        List<Paciente>pacientesCumplidos = new ArrayList<>();
-        
-        for(Paciente pac: ListaPacientes){
-        
-        if (objetivoCumplido(dieta) == true) {
 
-            pacientesCumplidos.add(pac);
+        List<Paciente> ListaPacientes = pacienteData.ListarPacientes();
 
-        }
+        List<Paciente> pacientesCumplidos = new ArrayList<>();
+
+        for (Paciente pac : ListaPacientes) {
+
+            if (objetivoCumplido(dieta) == true) {
+
+                pacientesCumplidos.add(pac);
+
+            }
         }
         return pacientesCumplidos;
     }
 
-    
-    
-    
-    public double obtenerPesoPorFecha(int id) {
-       double peso = 0;
+    public double obtenerPesoPorFecha(int idPaciente) {
+        double peso = 0;
 
-    LocalDate fecha = encontrarFechaMasReciente(id);
+        LocalDate fecha = encontrarFechaMasReciente(idPaciente);
 
-    try {
-        String sql = "SELECT peso FROM seguimiento WHERE idPaciente =? AND fecha=?";
-        PreparedStatement ps = con.prepareStatement(sql);
-        ps.setInt(1, id);
-        ps.setDate(2, Date.valueOf(fecha));
-        ResultSet resultado = ps.executeQuery();
+        try {
+            String sql = "SELECT peso FROM seguimiento WHERE idPaciente =? AND fecha=?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, idPaciente);
+            ps.setDate(2, Date.valueOf(fecha));
+            ResultSet resultado = ps.executeQuery();
 
-        if (resultado.next()) {
-            peso = resultado.getDouble("peso");
+            if (resultado.next()) {
+                peso = resultado.getDouble("peso");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al obtener el peso por fecha: " + ex.getMessage());
         }
-    } catch (SQLException ex) {
-        System.out.println("Error al obtener el peso por fecha: " + ex.getMessage());
+
+        return peso;
     }
 
+    public boolean objetivoCumplido(Dieta dieta) {
+        boolean VoF = false;
 
-    return peso;
-    }
+        LocalDate fechaMasReciente = encontrarFechaMasReciente(dieta.getPaciente().getIdPaciente());
 
-   public boolean objetivoCumplido(Dieta dieta) {
-    boolean VoF = false;
+        System.out.println("Fecha más reciente de seguimiento: " + fechaMasReciente);
 
-    LocalDate fechaMasReciente = encontrarFechaMasReciente(dieta.getPaciente().getIdPaciente());
+        if (fechaMasReciente != null && dieta.getFechaFinal() != null) {
+            System.out.println("Fecha final de la dieta: " + dieta.getFechaFinal());
+            System.out.println("Peso final de la dieta: " + dieta.getPesoFinal());
 
-    System.out.println("Fecha más reciente de seguimiento: " + fechaMasReciente);
-
-    if (fechaMasReciente != null && dieta.getFechaFinal() != null) {
-        System.out.println("Fecha final de la dieta: " + dieta.getFechaFinal());
-        System.out.println("Peso final de la dieta: " + dieta.getPesoFinal());
-
-        LocalDate fechaInicialDieta = dieta.getFechaInicial();
-        if (fechaMasReciente.compareTo(fechaInicialDieta) >= 0 && fechaMasReciente.compareTo(dieta.getFechaFinal()) <= 0
-                && dieta.getPesoFinal() == obtenerPesoPorFecha(dieta.getPaciente().getIdPaciente())) {
-            VoF = true;
+            LocalDate fechaInicialDieta = dieta.getFechaInicial();
+            if (fechaMasReciente.compareTo(fechaInicialDieta) >= 0 && fechaMasReciente.compareTo(dieta.getFechaFinal()) <= 0
+                    && dieta.getPesoFinal() == obtenerPesoPorFecha(dieta.getPaciente().getIdPaciente())) {
+                VoF = true;
+            }
         }
+
+        return VoF;
     }
-
-
-    return VoF;
-}
-    
-
 
     public List<Comida> ComidasMenosDeCalo(int calorias) {
         /* el nombre del metodo es horrible no sabia q ponerle*/
         String sql = "SELECT nombre,tipoComida,cantidadCalorias FROM comida WHERE cantidadCalorias <= ?";
-        Comida comida=null;
+        Comida comida = null;
         List<Comida> comidas = new ArrayList<>();
         try {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, calorias);
             ResultSet listaModificada = ps.executeQuery();
             while (listaModificada.next()) {
-                comida= new Comida();
+                comida = new Comida();
                 comida.setNombre(listaModificada.getString("nombre"));
                 comida.setTipoComida(listaModificada.getString("tipoComida"));
                 comida.setCantidadCalorias(listaModificada.getInt("cantidadCalorias"));
@@ -395,7 +379,7 @@ public boolean verificarSeguimientoExistente(Paciente paciente, LocalDate fecha)
         return comidas;
     }
 
-    public Seguimiento ObtenerSeguimientoPorIDPaciente(int id) {
+    public Seguimiento ObtenerSeguimientoPorIDPaciente(int idPaciente) {
 
         Seguimiento seguimiento = null;
 
@@ -404,7 +388,7 @@ public boolean verificarSeguimientoExistente(Paciente paciente, LocalDate fecha)
 
             PreparedStatement ps = con.prepareStatement(sql);
 
-            ps.setInt(1, id);
+            ps.setInt(1, idPaciente);
 
             ResultSet resultado = ps.executeQuery();
 
@@ -413,9 +397,9 @@ public boolean verificarSeguimientoExistente(Paciente paciente, LocalDate fecha)
                 seguimiento = new Seguimiento();
                 PacienteData pacientedata = new PacienteData();
 
-                seguimiento.setIdSeguimiento(id);
-                int idPaciente = resultado.getInt("idPaciente");
-                seguimiento.setPaciente(pacientedata.obtenerPacientePorId(idPaciente));
+                seguimiento.setIdSeguimiento(idPaciente);
+                int idPaciente1 = resultado.getInt("idPaciente");
+                seguimiento.setPaciente(pacientedata.obtenerPacientePorId(idPaciente1));
                 seguimiento.setFecha(resultado.getDate("fecha").toLocalDate());
                 seguimiento.setMedidaPecho(resultado.getDouble("medidaPecho"));
                 seguimiento.setMedidaCintura(resultado.getDouble("medidaCintura"));
@@ -463,24 +447,19 @@ public boolean verificarSeguimientoExistente(Paciente paciente, LocalDate fecha)
         return actual;
     }
 
-    
     public boolean objetivoCumplidoParaPaciente(Dieta dieta, Paciente paciente) {
-    LocalDate fechaMasReciente = encontrarFechaMasReciente(paciente.getIdPaciente());
+        LocalDate fechaMasReciente = encontrarFechaMasReciente(paciente.getIdPaciente());
 
-    if (fechaMasReciente != null && dieta.getFechaFinal() != null) {
-        LocalDate fechaInicialDieta = dieta.getFechaInicial();
+        if (fechaMasReciente != null && dieta.getFechaFinal() != null) {
+            LocalDate fechaInicialDieta = dieta.getFechaInicial();
 
-      
-        if (fechaMasReciente.compareTo(fechaInicialDieta) >= 0 && fechaMasReciente.compareTo(dieta.getFechaFinal()) <= 0
-                && dieta.getPesoFinal() == obtenerPesoPorFecha(paciente.getIdPaciente())) {
-            return true; 
+            if (fechaMasReciente.compareTo(fechaInicialDieta) >= 0 && fechaMasReciente.compareTo(dieta.getFechaFinal()) <= 0
+                    && dieta.getPesoFinal() == obtenerPesoPorFecha(paciente.getIdPaciente())) {
+                return true;
+            }
         }
+
+        return false;
     }
 
-    return false; 
-}
-
-    
-    
-    
 }

@@ -1,28 +1,27 @@
-
 package Entidades;
-
 
 import java.time.LocalDate;
 
 public class Dieta {
-   private int idDieta;
-   private String nombre;
-   private Paciente paciente;
-   private LocalDate fechaInicial, fechaFinal;
-   private double pesoInicial, pesoFinal;
-   private double altura;
+
+    private int idDieta;
+    private String nombre;
+    private Paciente paciente;
+    private LocalDate fechaInicial, fechaFinal;
+    private double pesoInicial, pesoFinal;
+    private double altura;
 
     public Dieta() {
     }
 
-    public Dieta(String nombre, Paciente paciente, LocalDate fechaInicial, double pesoInicial, double pesoFinal, LocalDate fechaFinal,double altura) {
+    public Dieta(String nombre, Paciente paciente, LocalDate fechaInicial, double pesoInicial, double pesoFinal, LocalDate fechaFinal, double altura) {
         this.nombre = nombre;
         this.paciente = paciente;
         this.fechaInicial = fechaInicial;
         this.fechaFinal = fechaFinal;
         this.pesoInicial = pesoInicial;
         this.pesoFinal = pesoFinal;
-        this.altura=altura;
+        this.altura = altura;
     }
 
     public Dieta(int idDieta, String nombre, Paciente paciente, LocalDate fechaInicial, double pesoInicial, double pesoFinal, LocalDate fechaFinal, double altura) {
@@ -33,7 +32,7 @@ public class Dieta {
         this.fechaFinal = fechaFinal;
         this.pesoInicial = pesoInicial;
         this.pesoFinal = pesoFinal;
-        this.altura=altura;
+        this.altura = altura;
     }
 
     public int getIdDieta() {
@@ -99,21 +98,10 @@ public class Dieta {
     public void setAltura(double altura) {
         this.altura = altura;
     }
-    
-    
-    
-    
 
     @Override
     public String toString() {
-        return "Dieta{" + "idDieta= " + idDieta + ", nombre= " + nombre + ", paciente= " + paciente + ", fechaInicial= " + fechaInicial + ", fechaFinal= " + fechaFinal + ", pesoInicial= " + pesoInicial + ", pesoFinal= " + pesoFinal + ", altura= " + altura + '}';
+        return idDieta + ", " + nombre;
     }
-    
-    
 
-    
-   
-    
-    
-   
 }

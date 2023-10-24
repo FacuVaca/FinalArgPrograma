@@ -1,4 +1,3 @@
-
 package AccesoADatos;
 
 import Entidades.Comida;
@@ -8,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JOptionPane;
-
 
 public class ComidaData {
 
@@ -21,12 +19,12 @@ public class ComidaData {
     }
 
     public void guardarComida(Comida comida) {
-        String repeticionCheck="Select * from comida where nombre=?";
+        String repeticionCheck = "Select * from comida where nombre=?";
         try {
-            PreparedStatement psCheck=con.prepareStatement(repeticionCheck);
-            psCheck.setString(1,comida.getNombre());
-            ResultSet result=psCheck.executeQuery();
-            if (!result.isBeforeFirst() ) {    
+            PreparedStatement psCheck = con.prepareStatement(repeticionCheck);
+            psCheck.setString(1, comida.getNombre());
+            ResultSet result = psCheck.executeQuery();
+            if (!result.isBeforeFirst()) {
                 String sql = "INSERT INTO comida (nombre, detalle,tipoComida,cantidadCalorias) VALUES (?,?,?,?) ";
                 try {
                     PreparedStatement psInsert = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -34,11 +32,11 @@ public class ComidaData {
                     psInsert.setString(2, comida.getDetalle());
                     psInsert.setString(3, comida.getTipoComida());
                     psInsert.setInt(4, comida.getCantidadCalorias());
-         
+
                     int listaModificada = psInsert.executeUpdate();
-            
+
                     ResultSet rs = psInsert.getGeneratedKeys();
-                    if(rs.next()){
+                    if (rs.next()) {
                         comida.setIdComida(rs.getInt(1));
                     }
                     if (listaModificada > 0) {
@@ -48,23 +46,19 @@ public class ComidaData {
                     psInsert.close();
                     psCheck.close();
                 } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "No se pudo establecer la conexion");
+                    JOptionPane.showMessageDialog(null, "No se pudo establecer la conexion");
                 }
             } else {
-            JOptionPane.showMessageDialog(null, "Comida Repetida");
+                JOptionPane.showMessageDialog(null, "Comida Repetida");
             }
-            
-        
+
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "No se pudo establecer la conexion");
         }
-      
-                
-        
 
     }
 
-    public Comida buscarComida(int id) {
+    public Comida buscarComida(int idComida) {
         Comida comida = null;
 
         try {
@@ -72,7 +66,7 @@ public class ComidaData {
 
             PreparedStatement ps = con.prepareStatement(sql);
 
-            ps.setInt(1, id);
+            ps.setInt(1, idComida);
 
             ResultSet resultado = ps.executeQuery();
 
@@ -80,7 +74,7 @@ public class ComidaData {
 
                 comida = new Comida();
 
-                comida.setIdComida(id);
+                comida.setIdComida(idComida);
                 comida.setNombre(resultado.getString("nombre"));
                 comida.setDetalle(resultado.getString("detalle"));
                 comida.setTipoComida(resultado.getString("tipoComida"));
@@ -98,28 +92,28 @@ public class ComidaData {
         return comida;
     }
 
-public boolean modificarComida(Comida comida) {
-    try {
-        String sql = "UPDATE comida SET nombre=?, detalle=?, tipoComida=?, cantidadCalorias=? WHERE idComida=?";
+    public boolean modificarComida(Comida comida) {
+        try {
+            String sql = "UPDATE comida SET nombre=?, detalle=?, tipoComida=?, cantidadCalorias=? WHERE idComida=?";
 
-        PreparedStatement ps = con.prepareStatement(sql);
-        
-        ps.setString(1, comida.getNombre());
-        ps.setString(2, comida.getDetalle());
-        ps.setString(3, comida.getTipoComida());
-        ps.setInt(4, comida.getCantidadCalorias());
-        ps.setInt(5, comida.getIdComida()); 
-        
-        int exito = ps.executeUpdate();
-        
-        return exito == 1;
-    } catch (SQLException ex) {
-        JOptionPane.showMessageDialog(null, "Error al Conectar con la tabla comida: " + ex.getMessage());
-        return false;
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setString(1, comida.getNombre());
+            ps.setString(2, comida.getDetalle());
+            ps.setString(3, comida.getTipoComida());
+            ps.setInt(4, comida.getCantidadCalorias());
+            ps.setInt(5, comida.getIdComida());
+
+            int exito = ps.executeUpdate();
+
+            return exito == 1;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al Conectar con la tabla comida: " + ex.getMessage());
+            return false;
+        }
     }
-}
 
-     public void eliminarComida(String nombreComida) {
+    public void eliminarComida(String nombreComida) {
         try {
             String sql = "DELETE FROM comida WHERE comida.nombre=?";
             PreparedStatement ps = con.prepareStatement(sql);
@@ -167,18 +161,20 @@ public boolean modificarComida(Comida comida) {
 
         return comidas;
     }
+
     public Comida obtenerComidaPorId(int idComida) {
-    
-    for (Comida comida : listarComidas()) {
-        if (comida.getIdComida()== idComida) {
-            return comida;
+
+        for (Comida comida : listarComidas()) {
+            if (comida.getIdComida() == idComida) {
+                return comida;
+            }
         }
+        return null;
     }
-    return null; 
-}
-    public List <Comida> obtenerComidaPorNombre(String nombreComida) {
-        ArrayList<Comida> listasComidas= new ArrayList<>();
-         Comida comida = null;
+
+    public List<Comida> obtenerComidaPorNombre(String nombreComida) {
+        ArrayList<Comida> listasComidas = new ArrayList<>();
+        Comida comida = null;
 
         try {
             String sql = "SELECT nombre,detalle,tipoComida,cantidadCalorias,idComida FROM comida WHERE nombre = ?";
@@ -193,7 +189,6 @@ public boolean modificarComida(Comida comida) {
 
                 comida = new Comida();
 
-                
                 comida.setNombre(nombreComida);
                 comida.setDetalle(resultado.getString("detalle"));
                 comida.setTipoComida(resultado.getString("tipoComida"));

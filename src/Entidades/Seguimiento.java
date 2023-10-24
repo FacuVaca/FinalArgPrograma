@@ -12,12 +12,13 @@ import java.time.LocalDate;
  * @author ACER
  */
 public class Seguimiento {
+
     private int idSeguimiento;
     private Paciente paciente;
     private LocalDate fecha;
     private double medidaPecho, medidaCintura, medidaCadera;
     private double peso;
-    
+
     public Seguimiento() {
     }
 
@@ -27,7 +28,7 @@ public class Seguimiento {
         this.medidaPecho = medidaPecho;
         this.medidaCintura = medidaCintura;
         this.medidaCadera = medidaCadera;
-        this.peso=peso;
+        this.peso = peso;
     }
 
     public Seguimiento(int idSeguimiento, Paciente paciente, LocalDate fecha, double medidaPecho, double medidaCintura, double medidaCadera, double peso) {
@@ -37,7 +38,7 @@ public class Seguimiento {
         this.medidaPecho = medidaPecho;
         this.medidaCintura = medidaCintura;
         this.medidaCadera = medidaCadera;
-        this.peso=peso;
+        this.peso = peso;
     }
 
     public int getIdSeguimiento() {
@@ -96,19 +97,9 @@ public class Seguimiento {
         this.peso = peso;
     }
 
-    
-    
-    
-    
-    
     @Override
     public String toString() {
-        return "Seguimiento{" + "idSeguimiento=" + idSeguimiento + ", paciente=" + paciente + ", fecha=" + fecha + ", medidaPecho=" + medidaPecho + ", medidaCintura=" + medidaCintura + ", medidaCadera=" + medidaCadera + ", peso= " + peso + '}';
+        return idSeguimiento + ", " + paciente;
     }
-    
-    
-    
-    
-    
-    
+
 }

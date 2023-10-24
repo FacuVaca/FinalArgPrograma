@@ -1,10 +1,9 @@
-
 package Entidades;
 
 public class Paciente {
+
     private String nombre, domicilio, telefono;
     private int dni, idPaciente;
-
 
     public Paciente() {
     }
@@ -14,7 +13,7 @@ public class Paciente {
         this.domicilio = domicilio;
         this.telefono = telefono;
         this.dni = dni;
-     
+
     }
 
     public Paciente(String nombre, int dni, String domicilio, String telefono, int idPaciente) {
@@ -23,7 +22,7 @@ public class Paciente {
         this.telefono = telefono;
         this.dni = dni;
         this.idPaciente = idPaciente;
-    
+
     }
 
     public String getNombre() {
@@ -68,8 +67,7 @@ public class Paciente {
 
     @Override
     public String toString() {
-        return "Paciente{" + "nombre= " + nombre + ", domicilio= " + domicilio + ", telefono= " + telefono + ", dni= " + dni + '}';
+        return nombre + ", " + idPaciente;
     }
-    
-    
+
 }
