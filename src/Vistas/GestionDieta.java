@@ -29,7 +29,7 @@ public class GestionDieta extends javax.swing.JInternalFrame {
             @Override
             public void keyTyped(KeyEvent e) {
                 char c = e.getKeyChar();
-                if (!Character.isLetter(c)) {
+                if (!(Character.isLetter(c)||c == ' ')) {
                     e.consume(); // Evitar la entrada de caracteres no válidos
                 }
             }

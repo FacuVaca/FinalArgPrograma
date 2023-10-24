@@ -9,6 +9,8 @@ import AccesoADatos.PacienteData;
 import AccesoADatos.SeguimientoData;
 import Entidades.Paciente;
 import Entidades.Seguimiento;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
@@ -22,13 +24,92 @@ public class SeguimientoVista extends javax.swing.JInternalFrame {
      * Creates new form ConsultaAtencion
      */
     public SeguimientoVista() {
-       
+
         initComponents();
-        
+
         cargarCombo();
+        jtPeso.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent ke) {
+                char c = ke.getKeyChar();
+                if (!(Character.isDigit(c) || c == '.')) {
+                    ke.consume(); // Evitar la entrada de caracteres no válidos
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent ke) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent ke) {
+
+            }
+
+        });
+         jtCadera.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent ke) {
+                char c = ke.getKeyChar();
+                if (!(Character.isDigit(c) || c == '.')) {
+                    ke.consume(); // Evitar la entrada de caracteres no válidos
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent ke) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent ke) {
+
+            }
+
+        });
+          jtCintura.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent ke) {
+                char c = ke.getKeyChar();
+                if (!(Character.isDigit(c) || c == '.')) {
+                    ke.consume(); // Evitar la entrada de caracteres no válidos
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent ke) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent ke) {
+
+            }
+
+        });
+           jtPecho.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent ke) {
+                char c = ke.getKeyChar();
+                if (!(Character.isDigit(c) || c == '.')) {
+                    ke.consume(); // Evitar la entrada de caracteres no válidos
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent ke) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent ke) {
+
+            }
+
+        });
     }
 
-  
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -254,25 +335,25 @@ public class SeguimientoVista extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jtPesoActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-     
+
         guardarDatos();
-     
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-      dispose();
+        dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jbModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarActionPerformed
-      
+
         modificarSeguimiento();
-        
+
     }//GEN-LAST:event_jbModificarActionPerformed
 
     private void jbBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBorrarActionPerformed
-   
+
         BorrarSeguimiento();
-        
+
     }//GEN-LAST:event_jbBorrarActionPerformed
 
 
@@ -299,105 +380,86 @@ public class SeguimientoVista extends javax.swing.JInternalFrame {
     private javax.swing.JTextField jtPeso;
     // End of variables declaration//GEN-END:variables
 
+    private void cargarCombo() {
 
- private void cargarCombo(){
-        
-        PacienteData pacienteData  = new PacienteData ();
-        
-        
-           
-           jcPacientes.addItem(null);
-        for(Paciente pac:pacienteData.ListarPacientes()){
+        PacienteData pacienteData = new PacienteData();
+
+        jcPacientes.addItem(null);
+        for (Paciente pac : pacienteData.ListarPacientes()) {
             jcPacientes.addItem(pac);
         }
 
+    }
 
- }
- 
- 
- 
- private void guardarDatos(){
-     
-     if(jcPacientes.getSelectedIndex()>=0){
-         
-         Paciente p = (Paciente) jcPacientes.getSelectedItem();
-         
-         Double Peso= Double.parseDouble(jtPeso.getText());
-         Double Cintura= Double.parseDouble(jtCintura.getText());
-         Double pecho= Double.parseDouble(jtPecho.getText());
-         Double cadera= Double.parseDouble(jtCadera.getText());
-         LocalDate fecha= jdFechaSeguimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-         
-         
-         Seguimiento seguimiento = new Seguimiento(p,fecha,pecho,Cintura,cadera,Peso);
-         
-         SeguimientoData seguimientoData= new SeguimientoData();
-         
-         seguimientoData.AgregarSeguimiento(seguimiento);
-         
-     }
-     
-     
- }
- 
- 
- private void modificarSeguimiento(){
-     
-      if(jcPacientes.getSelectedIndex()>=0){
-         
-         Paciente p = (Paciente) jcPacientes.getSelectedItem();
-         
-         int idPaciente= p.getIdPaciente();
-         
-         Double Peso= Double.parseDouble(jtPeso.getText());
-         Double Cintura= Double.parseDouble(jtCintura.getText());
-         Double pecho= Double.parseDouble(jtPecho.getText());
-         Double cadera= Double.parseDouble(jtCadera.getText());
-         LocalDate fecha= jdFechaSeguimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-      
-      
-       Seguimiento seguimiento = new Seguimiento(p,fecha,pecho,Cintura,cadera,Peso);
-         
-         SeguimientoData seguimientoData= new SeguimientoData();
-         
-         seguimientoData.modificarSeguimiento( idPaciente , seguimiento);
-      
-      
-      }
-     
-     
- }
- 
- private void BorrarSeguimiento(){
-     
-     if(jcPacientes.getSelectedIndex()>=0){
-         
-         Paciente p = (Paciente) jcPacientes.getSelectedItem();
-     
-         
-         int idPaciente= p.getIdPaciente();
-         
-         
-         
-         Double Peso= Double.parseDouble(jtPeso.getText());
-         Double Cintura= Double.parseDouble(jtCintura.getText());
-         Double pecho= Double.parseDouble(jtPecho.getText());
-         Double cadera= Double.parseDouble(jtCadera.getText());
-         LocalDate fecha= jdFechaSeguimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-      
-      
-       Seguimiento seguimiento = new Seguimiento(p,fecha,pecho,Cintura,cadera,Peso);
-         
-       int IdSeguimiento= seguimiento.getIdSeguimiento();
-       
-         
-       SeguimientoData seguimientoData= new SeguimientoData();
-         
-         
-         
-         seguimientoData.eliminarSeguimientoPorId(IdSeguimiento);
-     
-     }
- }
- 
+    private void guardarDatos() {
+
+        if (jcPacientes.getSelectedIndex() >= 0) {
+
+            Paciente p = (Paciente) jcPacientes.getSelectedItem();
+
+            Double Peso = Double.parseDouble(jtPeso.getText());
+            Double Cintura = Double.parseDouble(jtCintura.getText());
+            Double pecho = Double.parseDouble(jtPecho.getText());
+            Double cadera = Double.parseDouble(jtCadera.getText());
+            LocalDate fecha = jdFechaSeguimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            Seguimiento seguimiento = new Seguimiento(p, fecha, pecho, Cintura, cadera, Peso);
+
+            SeguimientoData seguimientoData = new SeguimientoData();
+
+            seguimientoData.AgregarSeguimiento(seguimiento);
+
+        }
+
+    }
+
+    private void modificarSeguimiento() {
+
+        if (jcPacientes.getSelectedIndex() >= 0) {
+
+            Paciente p = (Paciente) jcPacientes.getSelectedItem();
+
+            int idPaciente = p.getIdPaciente();
+
+            Double Peso = Double.parseDouble(jtPeso.getText());
+            Double Cintura = Double.parseDouble(jtCintura.getText());
+            Double pecho = Double.parseDouble(jtPecho.getText());
+            Double cadera = Double.parseDouble(jtCadera.getText());
+            LocalDate fecha = jdFechaSeguimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            Seguimiento seguimiento = new Seguimiento(p, fecha, pecho, Cintura, cadera, Peso);
+
+            SeguimientoData seguimientoData = new SeguimientoData();
+
+            seguimientoData.modificarSeguimiento(idPaciente, seguimiento);
+
+        }
+
+    }
+
+    private void BorrarSeguimiento() {
+
+        if (jcPacientes.getSelectedIndex() >= 0) {
+
+            Paciente p = (Paciente) jcPacientes.getSelectedItem();
+
+            int idPaciente = p.getIdPaciente();
+
+            Double Peso = Double.parseDouble(jtPeso.getText());
+            Double Cintura = Double.parseDouble(jtCintura.getText());
+            Double pecho = Double.parseDouble(jtPecho.getText());
+            Double cadera = Double.parseDouble(jtCadera.getText());
+            LocalDate fecha = jdFechaSeguimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            Seguimiento seguimiento = new Seguimiento(p, fecha, pecho, Cintura, cadera, Peso);
+
+            int IdSeguimiento = seguimiento.getIdSeguimiento();
+
+            SeguimientoData seguimientoData = new SeguimientoData();
+
+            seguimientoData.eliminarSeguimientoPorId(IdSeguimiento);
+
+        }
+    }
+
 }

@@ -11,6 +11,8 @@ import AccesoADatos.DietaData;
 import Entidades.Comida;
 import Entidades.Dieta;
 import Entidades.Paciente;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,10 +25,13 @@ import javax.swing.table.DefaultTableModel;
  * @author ACER
  */
 public class GestionComidas extends javax.swing.JInternalFrame {
-private DefaultTableModel tablaModelo = new DefaultTableModel();
-    public boolean isCellEditable(int f, int c){
+
+    private DefaultTableModel tablaModelo = new DefaultTableModel();
+
+    public boolean isCellEditable(int f, int c) {
         return false;
     }
+
     /**
      * Creates new form GestionComidas2
      */
@@ -35,9 +40,49 @@ private DefaultTableModel tablaModelo = new DefaultTableModel();
         armarCabecera();
         cargarCombo();
         cargarComboEliminar();
-        
+
         cargarComidaCombo();
         cargarDietaComboEliminar();
+        jtNombre.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!(Character.isLetter(c)||c == ' ')) {
+                    e.consume(); // Evitar la entrada de caracteres no válidos
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                // No es necesario implementar este método, pero se debe proporcionar una implementación
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                // No es necesario implementar este método, pero se debe proporcionar una implementación
+            }
+
+        });
+
+        jtCalorias.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent ke) {
+                char c = ke.getKeyChar();
+                if (!(Character.isDigit(c) || c == '.')) {
+                    ke.consume(); // Evitar la entrada de caracteres no válidos
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent ke) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent ke) {
+
+            }
+        });
     }
 
     /**
@@ -463,12 +508,12 @@ private DefaultTableModel tablaModelo = new DefaultTableModel();
     }// </editor-fold>//GEN-END:initComponents
 
     private void comboComidas1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboComidas1ActionPerformed
-        Comida comida=(Comida) comboComidas1.getSelectedItem();
-        jtEliminar.setText(comida.getNombre()+"");
+        Comida comida = (Comida) comboComidas1.getSelectedItem();
+        jtEliminar.setText(comida.getNombre() + "");
     }//GEN-LAST:event_comboComidas1ActionPerformed
 
     private void jbEliminar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbEliminar1ActionPerformed
-        ComidaData comidaData= new ComidaData();
+        ComidaData comidaData = new ComidaData();
         comidaData.eliminarComida(jtEliminar.getText());
     }//GEN-LAST:event_jbEliminar1ActionPerformed
 
@@ -493,7 +538,7 @@ private DefaultTableModel tablaModelo = new DefaultTableModel();
 
                 // Verificar si la comida ya se ha agregado para este horario
                 boolean comidaRepetida = comidasEnHorario.stream()
-                .anyMatch(c -> c.getNombre().equals(nombreComida));
+                        .anyMatch(c -> c.getNombre().equals(nombreComida));
 
                 if (comidaRepetida) {
                     JOptionPane.showMessageDialog(null, "Ya se ha agregado la misma comida para este horario.");
@@ -512,8 +557,8 @@ private DefaultTableModel tablaModelo = new DefaultTableModel();
     }//GEN-LAST:event_jbAgregar5ActionPerformed
 
     private void verDescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verDescripcionActionPerformed
-        int fila=TablaComida.getSelectedRow();
-        String detalle=this.tablaModelo.getValueAt(fila, 1).toString();
+        int fila = TablaComida.getSelectedRow();
+        String detalle = this.tablaModelo.getValueAt(fila, 1).toString();
 
         jtaDetalle.setText(detalle);
     }//GEN-LAST:event_verDescripcionActionPerformed
@@ -523,25 +568,25 @@ private DefaultTableModel tablaModelo = new DefaultTableModel();
         Comida comidas;
 
         String nombre;
-        if(comboComidas.getSelectedIndex()>0){
+        if (comboComidas.getSelectedIndex() > 0) {
 
             limpiarTabla();
 
-            comidas= (Comida) comboComidas.getSelectedItem();
+            comidas = (Comida) comboComidas.getSelectedItem();
 
             //Obtengo el id del combobox seleccionado
-            nombre=comidas.getNombre();
+            nombre = comidas.getNombre();
 
-            cargarTabla(nombre+"");
+            cargarTabla(nombre + "");
 
-        }else {
+        } else {
 
             limpiarTabla();
         }
     }//GEN-LAST:event_comboComidasActionPerformed
 
     private void jbVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbVolverActionPerformed
-       dispose();
+        dispose();
     }//GEN-LAST:event_jbVolverActionPerformed
 
     private void jbModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarActionPerformed
@@ -575,30 +620,31 @@ private DefaultTableModel tablaModelo = new DefaultTableModel();
 
     private void AgregarComidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AgregarComidaActionPerformed
         // TODO add your handling code here:
-        Comida comida=(Comida) ComidaCombo.getSelectedItem();
-        Dieta dieta=(Dieta) DietaCombo.getSelectedItem();
-        DietaComidaData dcd=new DietaComidaData();
-        dcd.AgregarComidaDieta(comida.getIdComida(),dieta.getIdDieta());
+        Comida comida = (Comida) ComidaCombo.getSelectedItem();
+        Dieta dieta = (Dieta) DietaCombo.getSelectedItem();
+        DietaComidaData dcd = new DietaComidaData();
+        dcd.AgregarComidaDieta(comida.getIdComida(), dieta.getIdDieta());
     }//GEN-LAST:event_AgregarComidaActionPerformed
 
     private void DietaComboEliminarItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_DietaComboEliminarItemStateChanged
         // TODO add your handling code here:
         ComidaComboEliminar.removeAllItems();
-        Dieta dieta=(Dieta) DietaComboEliminar.getSelectedItem();
-        DietaComidaData dcd=new DietaComidaData();
-        for(Comida diet:dcd.ListarComidas(dieta.getIdDieta())){
+        Dieta dieta = (Dieta) DietaComboEliminar.getSelectedItem();
+        DietaComidaData dcd = new DietaComidaData();
+        for (Comida diet : dcd.ListarComidas(dieta.getIdDieta())) {
             ComidaComboEliminar.addItem(diet);
         }
     }//GEN-LAST:event_DietaComboEliminarItemStateChanged
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        Comida comida=(Comida) ComidaComboEliminar.getSelectedItem();
-        Dieta dieta=(Dieta) DietaComboEliminar.getSelectedItem();
-        DietaComidaData dcd=new DietaComidaData();
-        dcd.BorrarComidaDieta(dieta.getIdDieta(),comida.getIdComida());
+        Comida comida = (Comida) ComidaComboEliminar.getSelectedItem();
+        Dieta dieta = (Dieta) DietaComboEliminar.getSelectedItem();
+        DietaComidaData dcd = new DietaComidaData();
+        dcd.BorrarComidaDieta(dieta.getIdDieta(), comida.getIdComida());
     }//GEN-LAST:event_jButton1ActionPerformed
     private final Map<String, List<Comida>> comidasPorHorario = new HashMap<>();
+
     /**
      * @param args the command line arguments
      */
@@ -657,85 +703,78 @@ private DefaultTableModel tablaModelo = new DefaultTableModel();
     private javax.swing.JTextArea jtaDetalle;
     private javax.swing.JButton verDescripcion;
     // End of variables declaration//GEN-END:variables
-  private void armarCabecera(){
+  private void armarCabecera() {
         tablaModelo.addColumn("Comida");
         tablaModelo.addColumn("Descripcion");
         tablaModelo.addColumn("Tipo de Comida");
         tablaModelo.addColumn("Calorias");
         tablaModelo.addColumn("idComida");
-        
+
         TablaComida.setModel(tablaModelo);
     }
-    
-    private void cargarCombo(){
-        
-        ComidaData comidaData  = new ComidaData ();
+
+    private void cargarCombo() {
+
+        ComidaData comidaData = new ComidaData();
         comboComidas.addItem(null);
-        for(Comida com:comidaData.listarComidas()){
-            
+        for (Comida com : comidaData.listarComidas()) {
+
             comboComidas.addItem(com);
         }
     }
-    
-    
-    private void cargarComboEliminar(){
-        
-        ComidaData comidaData  = new ComidaData ();    
+
+    private void cargarComboEliminar() {
+
+        ComidaData comidaData = new ComidaData();
         comboComidas1.addItem(null);
-        for(Comida com:comidaData.listarComidas()){
+        for (Comida com : comidaData.listarComidas()) {
             comboComidas1.addItem(com);
         }
     }
-     private void cargarTabla(String nombre1){
+
+    private void cargarTabla(String nombre1) {
         ComidaData comidaData = new ComidaData();
-        List <Comida> ListaComidas = new ArrayList<>(comidaData.obtenerComidaPorNombre(nombre1));
+        List<Comida> ListaComidas = new ArrayList<>(comidaData.obtenerComidaPorNombre(nombre1));
         for (Comida com : ListaComidas) {
-            String nombre= com.getNombre();
-            String detalle=com.getDetalle();
-            String tipoComida= com.getTipoComida();
-            int calorias=com.getCantidadCalorias();
-            int idComida=com.getIdComida();
-            tablaModelo.addRow( new Object [] {nombre,detalle,tipoComida,calorias,idComida});
+            String nombre = com.getNombre();
+            String detalle = com.getDetalle();
+            String tipoComida = com.getTipoComida();
+            int calorias = com.getCantidadCalorias();
+            int idComida = com.getIdComida();
+            tablaModelo.addRow(new Object[]{nombre, detalle, tipoComida, calorias, idComida});
         }
         tablaModelo.fireTableDataChanged();
-     }
-         private void cargarDietaCombo(){
-        DietaData dietaData  = new DietaData();    
+    }
+
+    private void cargarDietaCombo() {
+        DietaData dietaData = new DietaData();
         DietaCombo.addItem(null);
-        for(Dieta diet:dietaData.obtenerDietas()){
+        for (Dieta diet : dietaData.obtenerDietas()) {
             DietaCombo.addItem(diet);
         }
     }
-    
-    private void cargarComidaCombo(){
-        ComidaData comData  = new ComidaData ();;
-        for(Comida comid:comData.listarComidas()){
+
+    private void cargarComidaCombo() {
+        ComidaData comData = new ComidaData();;
+        for (Comida comid : comData.listarComidas()) {
             ComidaCombo.addItem(comid);
         }
     }
-    
-    private void cargarDietaComboEliminar(){
-        DietaData dd  = new DietaData();    
+
+    private void cargarDietaComboEliminar() {
+        DietaData dd = new DietaData();
         Paciente paciente = new Paciente();
-        for(Dieta diet:dd.obtenerDietas()){
+        for (Dieta diet : dd.obtenerDietas()) {
             DietaCombo.addItem(diet);
             DietaComboEliminar.addItem(diet);
         }
     }
-     private void limpiarTabla() {
-         
-    DefaultTableModel modelo = (DefaultTableModel) TablaComida.getModel();
-    modelo.setRowCount(0); // Limpia todas las filas de la tabla
-    tablaModelo.fireTableDataChanged();
-}
 
+    private void limpiarTabla() {
 
-
-
-
-
-
-
-
+        DefaultTableModel modelo = (DefaultTableModel) TablaComida.getModel();
+        modelo.setRowCount(0); // Limpia todas las filas de la tabla
+        tablaModelo.fireTableDataChanged();
+    }
 
 }
