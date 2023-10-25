@@ -656,10 +656,7 @@ private void cargarDatosDelPacienteSeleccionado() {
         DietaData dietaData = new DietaData();
         int idPaciente = p.getIdPaciente();
         
-          if (dietaData.obtenerUnaDietaPorPersona(idPaciente) != null) {
-                JOptionPane.showMessageDialog(null, "El paciente ya posee una dieta ");
-
-            }else{
+          
         Dieta dieta = new Dieta(nombre, p, fechaInicial, pesoInicial, pesoFinal, fechaFinal, altura);
         dietaData.guardarDieta(dieta);
         
@@ -677,7 +674,7 @@ private void cargarDatosDelPacienteSeleccionado() {
         } else {
             JOptionPane.showMessageDialog(null, "Ya existe un seguimiento para esta fecha.");
         }
-        }
+        
         
     } catch (NullPointerException e) {
         JOptionPane.showMessageDialog(null, "Paciente no encontrado " + e.getMessage());

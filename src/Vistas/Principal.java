@@ -8,8 +8,6 @@ package Vistas;
 
 import AccesoADatos.SeguimientoData;
 
-import Vistas.GestionComidas;
-import Vistas.GestionPaciente;
 import java.awt.Color;
 
 

@@ -9,6 +9,7 @@ import Entidades.Comida;
 import Entidades.Dieta;
 import Entidades.Paciente;
 import Entidades.Seguimiento;
+import java.awt.HeadlessException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -451,14 +452,23 @@ public class Consultas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     private void ComboPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboPacienteActionPerformed
-         Paciente paciente=(Paciente) ComboPaciente.getSelectedItem();
+       try{
+        Paciente paciente=(Paciente) ComboPaciente.getSelectedItem();
         SeguimientoData segData = new SeguimientoData();
         int idPaciente=paciente.getIdPaciente();
         
-        
-        imcInicial.setText(segData.CalcularIMCInicial(idPaciente)+"");
+        if(segData.CalcularIMCInicial(idPaciente)==0 ||segData.CalcularIMCFinal(idPaciente)==0 || segData.CalcularIMCFinalObtenido(idPaciente)==0){
+            JOptionPane.showMessageDialog(null, "falta ingresar el peso de una dieta o seguimiento al paciente ");
+        }else{
+           imcInicial.setText(segData.CalcularIMCInicial(idPaciente)+"");
         imcFinal.setText(segData.CalcularIMCFinal(idPaciente)+"");
-        imcUltimaFecha.setText(segData.CalcularIMCFinalObtenido(idPaciente)+"");
+        imcUltimaFecha.setText(segData.CalcularIMCFinalObtenido(idPaciente)+""); 
+        }
+        }catch(NullPointerException | HeadlessException  e){
+            JOptionPane.showMessageDialog(null, "falta ingresar el peso de una dieta o seguimiento al paciente-"+ e.getMessage());
+        }catch(Exception  e){
+            JOptionPane.showMessageDialog(null, "falta ingresar el peso de una dieta o seguimiento al paciente-"+ e.getMessage());
+        }
     }//GEN-LAST:event_ComboPacienteActionPerformed
 
 
