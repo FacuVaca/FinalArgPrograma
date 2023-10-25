@@ -651,7 +651,16 @@ public class GestionComidas extends javax.swing.JInternalFrame {
         Dieta dieta = (Dieta) DietaComboEliminar.getSelectedItem();
         DietaComidaData dcd = new DietaComidaData();
         dcd.BorrarComidaDieta(dieta.getIdDieta(), comida.getIdComida());
+        recargarComboEliminar();
     }//GEN-LAST:event_jButton1ActionPerformed
+    private void recargarComboEliminar(){
+            Comida comida = (Comida) ComidaCombo.getSelectedItem();
+        Dieta dieta = (Dieta) DietaCombo.getSelectedItem();
+        DietaComidaData dcd = new DietaComidaData();
+        dcd.AgregarComidaDieta(comida.getIdComida(), dieta.getIdDieta());
+        recargarComidaComboEliminar();
+    }
+    
     private final Map<String, List<Comida>> comidasPorHorario = new HashMap<>();
 
     /**
