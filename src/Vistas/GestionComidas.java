@@ -554,6 +554,7 @@ public class GestionComidas extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos");
             }
         }
+        cargarComidaCombo();
     }//GEN-LAST:event_jbAgregar5ActionPerformed
 
     private void verDescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verDescripcionActionPerformed
@@ -624,6 +625,7 @@ public class GestionComidas extends javax.swing.JInternalFrame {
         Dieta dieta = (Dieta) DietaCombo.getSelectedItem();
         DietaComidaData dcd = new DietaComidaData();
         dcd.AgregarComidaDieta(comida.getIdComida(), dieta.getIdDieta());
+        recargarComidaComboEliminar();
     }//GEN-LAST:event_AgregarComidaActionPerformed
 
     private void DietaComboEliminarItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_DietaComboEliminarItemStateChanged
@@ -635,7 +637,14 @@ public class GestionComidas extends javax.swing.JInternalFrame {
             ComidaComboEliminar.addItem(diet);
         }
     }//GEN-LAST:event_DietaComboEliminarItemStateChanged
-
+    private void recargarComidaComboEliminar(){
+            ComidaComboEliminar.removeAllItems();
+        Dieta dieta = (Dieta) DietaComboEliminar.getSelectedItem();
+        DietaComidaData dcd = new DietaComidaData();
+        for (Comida diet : dcd.ListarComidas(dieta.getIdDieta())) {
+            ComidaComboEliminar.addItem(diet);
+        }
+    }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         Comida comida = (Comida) ComidaComboEliminar.getSelectedItem();

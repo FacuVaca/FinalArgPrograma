@@ -497,7 +497,17 @@ public class GestionDieta extends javax.swing.JInternalFrame {
 
     private void jbGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGuardarActionPerformed
         agregar();
+        recargarComboDieta();
     }//GEN-LAST:event_jbGuardarActionPerformed
+    private void recargarComboDieta(){
+        comboDieta.removeAllItems();
+        Paciente pacientea=(Paciente) jcPacientes1.getSelectedItem();
+        PacienteData dd=new PacienteData();
+System.out.println(pacientea);
+        for(Dieta d:dd.ListarDietas(pacientea.getIdPaciente(), pacientea)){
+            comboDieta.addItem(d);
+        }
+    } 
 
     private void jbModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarActionPerformed
         ModificarDatos();
