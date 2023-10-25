@@ -3,6 +3,7 @@ package Vistas;
 
 import AccesoADatos.DietaComidaData;
 import AccesoADatos.DietaData;
+import AccesoADatos.PacienteData;
 import AccesoADatos.SeguimientoData;
 import Entidades.Comida;
 import Entidades.Dieta;
@@ -31,6 +32,7 @@ public class Consultas extends javax.swing.JInternalFrame {
         armarCabecera();
         armarDietaCabecera();
         cargarDietaCombo();
+        cargarComboPaciente();
     }
 
     
@@ -63,6 +65,16 @@ public class Consultas extends javax.swing.JInternalFrame {
         jButton1 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        ComboPaciente = new javax.swing.JComboBox<>();
+        imcInicial = new javax.swing.JTextField();
+        imcUltimaFecha = new javax.swing.JTextField();
+        imcFinal = new javax.swing.JTextField();
 
         jLabel1.setText("jLabel1");
 
@@ -257,6 +269,87 @@ public class Consultas extends javax.swing.JInternalFrame {
 
         jTabbedPane1.addTab("Historial de objetivos", jPanel2);
 
+        jPanel4.setBackground(new java.awt.Color(62, 168, 132));
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel12.setText("Calculo IMC");
+
+        jLabel8.setText("Seleccione un Paciente");
+
+        jLabel11.setText("IMC Ultima Fecha");
+
+        jLabel9.setText("IMC Inicial");
+
+        jLabel10.setText("IMC Final Deseado");
+
+        ComboPaciente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ComboPacienteActionPerformed(evt);
+            }
+        });
+
+        imcInicial.setEditable(false);
+
+        imcUltimaFecha.setEditable(false);
+
+        imcFinal.setEditable(false);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(475, 475, 475)
+                        .addComponent(jLabel12))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(172, 172, 172)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(58, 58, 58)
+                                .addComponent(jLabel8)
+                                .addGap(64, 64, 64)
+                                .addComponent(ComboPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addGap(226, 226, 226)
+                                .addComponent(jLabel11)
+                                .addGap(228, 228, 228)
+                                .addComponent(jLabel10))))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(116, 116, 116)
+                        .addComponent(imcInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(85, 85, 85)
+                        .addComponent(imcUltimaFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(82, 82, 82)
+                        .addComponent(imcFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(191, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(69, 69, 69)
+                .addComponent(jLabel12)
+                .addGap(66, 66, 66)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(ComboPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(155, 155, 155)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel11))
+                .addGap(55, 55, 55)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(imcInicial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(imcUltimaFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(imcFinal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(422, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Consulta IMC", jPanel4);
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -357,21 +450,42 @@ public class Consultas extends javax.swing.JInternalFrame {
        
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 
+    private void ComboPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboPacienteActionPerformed
+         Paciente paciente=(Paciente) ComboPaciente.getSelectedItem();
+        SeguimientoData segData = new SeguimientoData();
+        int idPaciente=paciente.getIdPaciente();
+        
+        
+        imcInicial.setText(segData.CalcularIMCInicial(idPaciente)+"");
+        imcFinal.setText(segData.CalcularIMCFinal(idPaciente)+"");
+        imcUltimaFecha.setText(segData.CalcularIMCFinalObtenido(idPaciente)+"");
+    }//GEN-LAST:event_ComboPacienteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<Paciente> ComboPaciente;
     private javax.swing.JTextField caloBuscador;
     private javax.swing.JComboBox<Dieta> dietaCombo;
+    private javax.swing.JTextField imcFinal;
+    private javax.swing.JTextField imcInicial;
+    private javax.swing.JTextField imcUltimaFecha;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JRadioButton jRCumplido;
@@ -421,6 +535,7 @@ public class Consultas extends javax.swing.JInternalFrame {
   private void CargarCumplidos (){
       
     if (jRCumplido.isSelected()) {
+        jRNoCumplido.setSelected(false);
     DietaData dietaData = new DietaData();
     Dieta dieta = new Dieta();
     SeguimientoData seguimientoData = new SeguimientoData();
@@ -474,7 +589,7 @@ public class Consultas extends javax.swing.JInternalFrame {
 private void CargarNoCumplidos() {
     
     if (jRNoCumplido.isSelected()) {
-        
+        jRCumplido.setSelected(false);
         DietaData dietaData = new DietaData();
         
         SeguimientoData seguimientoData = new SeguimientoData();
@@ -527,6 +642,13 @@ private void CargarNoCumplidos() {
         dietaCombo.addItem(null);
         for(Dieta diet:dietaData.obtenerDietas()){
             dietaCombo.addItem(diet);
+        }
+    }
+    
+       private void cargarComboPaciente() {
+        PacienteData pacienteData = new PacienteData();
+        for (Paciente pac : pacienteData.ListarPacientes()) {
+            ComboPaciente.addItem(pac);
         }
     }
  }
