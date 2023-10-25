@@ -15,9 +15,6 @@ import Entidades.Seguimiento;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import javax.swing.JOptionPane;
@@ -657,6 +654,12 @@ private void cargarDatosDelPacienteSeleccionado() {
         Double cadera = Double.valueOf(jtMedidaCadera.getText());
         
         DietaData dietaData = new DietaData();
+        int idPaciente = p.getIdPaciente();
+        
+          if (dietaData.obtenerUnaDietaPorPersona(idPaciente) != null) {
+                JOptionPane.showMessageDialog(null, "El paciente ya posee una dieta ");
+
+            }else{
         Dieta dieta = new Dieta(nombre, p, fechaInicial, pesoInicial, pesoFinal, fechaFinal, altura);
         dietaData.guardarDieta(dieta);
         
@@ -673,6 +676,7 @@ private void cargarDatosDelPacienteSeleccionado() {
             JOptionPane.showMessageDialog(null, "Dieta y seguimiento agregados con éxito.");
         } else {
             JOptionPane.showMessageDialog(null, "Ya existe un seguimiento para esta fecha.");
+        }
         }
         
     } catch (NullPointerException e) {

@@ -252,6 +252,34 @@ public class SeguimientoData {
         return IMCFinal;
 
     }
+    
+     public double CalcularIMCFinalObtenido(int idPaciente) {
+
+        double IMCFinal = 0;
+
+        String sql = "Select altura FROM DIETA  WHERE idPaciente = ? ";
+double pesoObtenido= obtenerPesoPorFecha(idPaciente);
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setInt(1, idPaciente);
+
+            ResultSet resultado = ps.executeQuery();
+
+            resultado.next();
+
+            double alturaFinal = resultado.getDouble("altura");
+           
+
+            IMCFinal = pesoObtenido/ (alturaFinal * alturaFinal);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(SeguimientoData.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return IMCFinal;
+
+    }
 
     public double CalcularIMCInicial(int idPaciente) {
 
