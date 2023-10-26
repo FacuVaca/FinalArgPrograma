@@ -3,12 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/ConsultorioNutricionista-V0.9/src/Entidades/Seguimiento.java</file>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/ConsultorioNutricionista-V0.9/src/Vistas/GestionComidas.java</file>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/ConsultorioNutricionista-V0.9/src/Vistas/GestionDieta.java</file>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/ConsultorioNutricionista-V0.9/src/Vistas/GestionPaciente.java</file>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/ConsultorioNutricionista-V0.9/src/AccesoADatos/DietaData.java</file>
-            <file>file:/C:/Users/User/Documents/NetBeansProjects/ConsultorioNutricionista-V0.9/src/AccesoADatos/SeguimientoData.java</file>
+            <file>file:/D:/NutricionistaProyecto/ConsultorioNutricionista-V0.9/src/Vistas/GestionDieta.java</file>
+            <file>file:/D:/NutricionistaProyecto/ConsultorioNutricionista-V0.9/src/Vistas/Consultas.java</file>
+            <file>file:/D:/NutricionistaProyecto/ConsultorioNutricionista-V0.9/src/Vistas/SeguimientoVista.java</file>
+            <file>file:/D:/NutricionistaProyecto/ConsultorioNutricionista-V0.9/src/Vistas/Principal.java</file>
+            <file>file:/D:/NutricionistaProyecto/ConsultorioNutricionista-V0.9/src/Vistas/GestionPaciente.java</file>
+            <file>file:/D:/NutricionistaProyecto/ConsultorioNutricionista-V0.9/src/Vistas/GestionComidas.java</file>
         </group>
     </open-files>
 </project-private>

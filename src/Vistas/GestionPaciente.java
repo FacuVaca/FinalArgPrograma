@@ -16,8 +16,10 @@ import javax.swing.JOptionPane;
  * @author ACER
  */
 public class GestionPaciente extends javax.swing.JInternalFrame {
-Paciente paciente = new Paciente();
+
+    Paciente paciente = new Paciente();
     PacienteData pacienteData = new PacienteData();
+
     /**
      * Creates new form GestionPaciente
      */
@@ -27,7 +29,7 @@ Paciente paciente = new Paciente();
             @Override
             public void keyTyped(KeyEvent e) {
                 char c = e.getKeyChar();
-                if (!(Character.isLetter(c)||c == ' ')) {
+                if (!(Character.isLetter(c) || c == ' ')) {
                     e.consume(); // Evitar la entrada de caracteres no válidos
                 }
             }
@@ -51,34 +53,34 @@ Paciente paciente = new Paciente();
                     ke.consume(); // Evitar la entrada de caracteres no válidos
                 }
             }
-            
+
             @Override
             public void keyPressed(KeyEvent ke) {
-                
+
             }
-            
+
             @Override
             public void keyReleased(KeyEvent ke) {
-                
+
             }
         });
         jtDomicilio.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent ke) {
                 char c = ke.getKeyChar();
-                if (!(Character.isDigit(c) || c == ' '||Character.isLetter(c))) {
+                if (!(Character.isDigit(c) || c == ' ' || Character.isLetter(c))) {
                     ke.consume(); // Evitar la entrada de caracteres no válidos
                 }
             }
-            
+
             @Override
             public void keyPressed(KeyEvent ke) {
-                
+
             }
-            
+
             @Override
             public void keyReleased(KeyEvent ke) {
-                
+
             }
         });
         jtTelefono.addKeyListener(new KeyListener() {
@@ -89,15 +91,15 @@ Paciente paciente = new Paciente();
                     ke.consume(); // Evitar la entrada de caracteres no válidos
                 }
             }
-            
+
             @Override
             public void keyPressed(KeyEvent ke) {
-                
+
             }
-            
+
             @Override
             public void keyReleased(KeyEvent ke) {
-                
+
             }
         });
     }
@@ -282,13 +284,20 @@ Paciente paciente = new Paciente();
             int dni = Integer.parseInt(jtDni.getText());
 
             Paciente busquedaPaciente = pacienteData.buscarPacientePorDni(dni);
-
-            jtNombre.setText(busquedaPaciente.getNombre());
-            jtDomicilio.setText(busquedaPaciente.getDomicilio());
-            jtTelefono.setText(busquedaPaciente.getTelefono());
+            if (busquedaPaciente == null) {
+                JOptionPane.showMessageDialog(null, "El paciente no existe");
+            } else {
+                jtNombre.setText(busquedaPaciente.getNombre());
+                jtDomicilio.setText(busquedaPaciente.getDomicilio());
+                jtTelefono.setText(busquedaPaciente.getTelefono());
+            }
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(null, "Complete el dni" + e.getMessage());
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(null, "El dni debe ser numerico");
+            JOptionPane.showMessageDialog(null, "El dni debe ser numerico y el campo del mismo no puede estar vacio");
         }
+
+
     }//GEN-LAST:event_jbBuscarActionPerformed
 
     private void jbVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbVolverActionPerformed
@@ -296,24 +305,33 @@ Paciente paciente = new Paciente();
     }//GEN-LAST:event_jbVolverActionPerformed
 
     private void jbBajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbBajaActionPerformed
-        int confirmar = JOptionPane.showConfirmDialog(null, " ¿Seguro desea eliminar al paciente?");
-        if (confirmar == JOptionPane.OK_OPTION) {
+        
+
+        try {
 
             String nombre = jtNombre.getText();
-            try {
-                int dni = Integer.parseInt(jtDni.getText());
-                String domicilio = jtDomicilio.getText();
-                String telefono = jtTelefono.getText();
-                int idPaciente = pacienteData.buscarPacientePorDni(dni).getIdPaciente();
-                paciente = new Paciente(nombre, dni, domicilio, telefono,idPaciente);
-
-                pacienteData.eliminarPaciente(idPaciente);
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, "El dni debe ser numerico");
+            int dni = Integer.parseInt(jtDni.getText());
+            String domicilio = jtDomicilio.getText();
+            String telefono = jtTelefono.getText();
+            int idPaciente = pacienteData.buscarPacientePorDni(dni).getIdPaciente();
+            if ( dni<=0 || domicilio.equalsIgnoreCase(" ") || telefono.equalsIgnoreCase(" ")  || nombre.equalsIgnoreCase(" ") || domicilio.isEmpty() || telefono.isEmpty() || nombre.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Todos los campos deben estar completos");
+            } else {
+                paciente = new Paciente(nombre, dni, domicilio, telefono, idPaciente);
+               int confirmar = JOptionPane.showConfirmDialog(null, " ¿Seguro desea eliminar al paciente?");
+                if (confirmar == JOptionPane.OK_OPTION) {
+                    pacienteData.eliminarPaciente(idPaciente);
+                } else {
+                    JOptionPane.showMessageDialog(null, "No se elimino al paciente");
+                }
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "No se elimino al paciente");
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "El dni debe ser numerico y todos los campos deben estar completos");
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(null, "Complete los campos requeridos, puede utilizar el boton buscar" + e.getMessage());
         }
+
     }//GEN-LAST:event_jbBajaActionPerformed
 
     private void jbModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarActionPerformed
@@ -335,7 +353,7 @@ Paciente paciente = new Paciente();
                 }
             }
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(null, "El dni debe ser numerico");
+            JOptionPane.showMessageDialog(null, "El dni debe ser numerico y todos los campos deben estar completos");
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos");
         }
@@ -367,7 +385,7 @@ Paciente paciente = new Paciente();
                 JOptionPane.showMessageDialog(null, "El dni ya se encuentra registrado");
             }
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(null, "El dni debe ser numerico");
+            JOptionPane.showMessageDialog(null, "El dni debe ser numerico y todos los campos deben estar llenos");
         } catch (NullPointerException e) {
             JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos " + e.getMessage());
         }
@@ -428,21 +446,19 @@ Paciente paciente = new Paciente();
     private javax.swing.JTextField jtTelefono;
     // End of variables declaration//GEN-END:variables
 public boolean isNumeric(String cadena) {
-    boolean resultado;
+        boolean resultado;
 
-    try {
-       
-        Integer.parseInt(cadena);
+        try {
 
-      
-        resultado = true;
-    } catch (NumberFormatException excepcion) {
-        
-        resultado = cadena.matches("[0-9]*");
+            Integer.parseInt(cadena);
+
+            resultado = true;
+        } catch (NumberFormatException excepcion) {
+
+            resultado = cadena.matches("[0-9]*");
+        }
+
+        return resultado;
     }
-
-    return resultado;
-}
-
 
 }
