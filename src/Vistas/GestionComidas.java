@@ -594,7 +594,10 @@ public class GestionComidas extends javax.swing.JInternalFrame {
         int cont = 0;
 
         ComidaData comidaData = new ComidaData();
+       
         Comida comida;
+        
+        try{
         for (int i = 0; i < this.TablaComida.getRowCount(); i++) {
             String nombre = this.tablaModelo.getValueAt(i, 0).toString();
             String detalle = this.tablaModelo.getValueAt(i, 1).toString();
@@ -612,6 +615,9 @@ public class GestionComidas extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "La Comida se modificó correctamente");
         } else {
             JOptionPane.showMessageDialog(null, "La comida no se pudo modificar");
+        }
+        }catch(NullPointerException e){
+            JOptionPane.showMessageDialog(null, "Todos los campos deben estar completos "+e.getMessage());
         }
     }//GEN-LAST:event_jbModificarActionPerformed
 

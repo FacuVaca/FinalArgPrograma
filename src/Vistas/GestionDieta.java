@@ -749,6 +749,10 @@ private void cargarDatosDelPacienteSeleccionado() {
         Double cintura = Double.valueOf(jtMedidaCintura.getText());
         Double cadera = Double.valueOf(jtMedidaCadera.getText());
         
+        if(p==null || nombre.isEmpty() || fechaInicial==null || fechaFinal== null || pesoInicial==0 || pesoFinal==0 ||altura ==0 || cadera==0 ||pecho ==0 || cintura==0){
+            JOptionPane.showMessageDialog(null, "Todos los campos deben estar completos");
+        }else{
+        
         DietaData dietaData = new DietaData();
         int idPaciente = p.getIdPaciente();
         
@@ -770,10 +774,10 @@ private void cargarDatosDelPacienteSeleccionado() {
         } else {
             JOptionPane.showMessageDialog(null, "Ya existe un seguimiento para esta fecha.");
         }
-        
+        }
         
     } catch (NullPointerException e) {
-        JOptionPane.showMessageDialog(null, "Paciente no encontrado " + e.getMessage());
+        JOptionPane.showMessageDialog(null, "Error, Revisa los datos ingresados." + e.getMessage());
     } catch (NumberFormatException e) {
         JOptionPane.showMessageDialog(null, "Debe ingresar datos numéricos " + e.getMessage());
     }
@@ -800,6 +804,9 @@ private void cargarDatosDelPacienteSeleccionado() {
         Double cintura = Double.valueOf(jtMedidaCintura.getText());
         Double cadera = Double.valueOf(jtMedidaCadera.getText());
 
+        if(p==null || nombre.isEmpty() || fechaInicial==null || fechaFinal== null || pesoInicial==0 || pesoFinal==0 ||altura ==0 || cadera==0 ||pecho ==0 || cintura==0){
+            JOptionPane.showMessageDialog(null, "Todos los campos deben estar completos");
+        }else{
         DietaData dietaData = new DietaData();
 
         Dieta dieta = new Dieta(idDieta, nombre, p, fechaInicial, pesoInicial, pesoFinal, fechaFinal, altura);
@@ -817,7 +824,7 @@ private void cargarDatosDelPacienteSeleccionado() {
         
 
         JOptionPane.showMessageDialog(null, "Dieta modificada");
-
+ }
     } catch (NumberFormatException | NullPointerException ex) {
         JOptionPane.showMessageDialog(null, "Error, Revisa los datos ingresados.");
     }

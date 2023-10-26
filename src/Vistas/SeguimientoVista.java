@@ -14,6 +14,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -432,8 +433,8 @@ public class SeguimientoVista extends javax.swing.JInternalFrame {
     }
 
     private void guardarDatos() {
-
-        if (jcPacientes.getSelectedIndex() >= 0) {
+try{
+//        if (jcPacientes.getSelectedIndex() >= 0) {
 
             Paciente p = (Paciente) jcPacientes.getSelectedItem();
             Dieta d = (Dieta) comboDieta.getSelectedItem();
@@ -442,19 +443,24 @@ public class SeguimientoVista extends javax.swing.JInternalFrame {
             Double pecho = Double.parseDouble(jtPecho.getText());
             Double cadera = Double.parseDouble(jtCadera.getText());
             LocalDate fecha = jdFechaSeguimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            
+            if(p==null || d==null|| fecha==null || Peso==0 || cadera==0 ||pecho ==0 || Cintura==0){
+            JOptionPane.showMessageDialog(null, "Todos los campos deben estar completos");
+        }else{
             Seguimiento seguimiento = new Seguimiento(p, fecha, pecho, Cintura, cadera, Peso,d.getIdDieta());
             SeguimientoData seguimientoData = new SeguimientoData();
 
             seguimientoData.AgregarSeguimiento(seguimiento);
-
-        }
-
+}
+//        }
+}catch(NullPointerException | NumberFormatException e){
+   JOptionPane.showMessageDialog(null, "Verifique que los datos numericos sean correctos y que todos los campos esten completos");
+}
+    
     }
 
     private void modificarSeguimiento() {
-
-        if (jcPacientes.getSelectedIndex() >= 0) {
+try{
+//        if (jcPacientes.getSelectedIndex() >= 0) {
 
             Paciente p = (Paciente) jcPacientes.getSelectedItem();
 
@@ -465,20 +471,25 @@ public class SeguimientoVista extends javax.swing.JInternalFrame {
             Double pecho = Double.parseDouble(jtPecho.getText());
             Double cadera = Double.parseDouble(jtCadera.getText());
             LocalDate fecha = jdFechaSeguimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
+ if(p==null || fecha==null || Peso==0 || cadera==0 ||pecho ==0 || Cintura==0){
+            JOptionPane.showMessageDialog(null, "Todos los campos deben estar completos");
+        }else{
             Seguimiento seguimiento = new Seguimiento(p, fecha, pecho, Cintura, cadera, Peso);
 
             SeguimientoData seguimientoData = new SeguimientoData();
 
             seguimientoData.modificarSeguimiento(idPaciente, seguimiento);
-
-        }
+}
+//        }
+        }catch(NullPointerException | NumberFormatException e){
+   JOptionPane.showMessageDialog(null, "Verifique que los datos numericos sean correctos y que todos los campos esten completos");
+}
 
     }
 
     private void BorrarSeguimiento() {
-
-        if (jcPacientes.getSelectedIndex() >= 0) {
+try{
+//        if (jcPacientes.getSelectedIndex() >= 0) {
 
             Paciente p = (Paciente) jcPacientes.getSelectedItem();
 
@@ -490,6 +501,9 @@ public class SeguimientoVista extends javax.swing.JInternalFrame {
             Double cadera = Double.parseDouble(jtCadera.getText());
             LocalDate fecha = jdFechaSeguimiento.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
+            if(p==null || fecha==null || Peso==0 || cadera==0 ||pecho ==0 || Cintura==0){
+            JOptionPane.showMessageDialog(null, "Todos los campos deben estar completos");
+        }else{
             Seguimiento seguimiento = new Seguimiento(p, fecha, pecho, Cintura, cadera, Peso);
 
             int IdSeguimiento = seguimiento.getIdSeguimiento();
@@ -497,8 +511,12 @@ public class SeguimientoVista extends javax.swing.JInternalFrame {
             SeguimientoData seguimientoData = new SeguimientoData();
 
             seguimientoData.eliminarSeguimientoPorId(IdSeguimiento);
-
-        }
+}
+        
+        }catch(NullPointerException | NumberFormatException e){
+   JOptionPane.showMessageDialog(null, "Verifique que los datos numericos sean correctos y que todos los campos esten completos");
+}
     }
+
 
 }
