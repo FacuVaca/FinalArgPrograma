@@ -591,19 +591,26 @@ public class GestionComidas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jbVolverActionPerformed
 
     private void jbModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbModificarActionPerformed
-        int cont = 0;
+    int cont = 0;
+    ComidaData comidaData = new ComidaData();
+    Comida comida;
+    boolean todosCamposLlenos = true;
 
-        ComidaData comidaData = new ComidaData();
-       
-        Comida comida;
-        
-        try{
+    try {
         for (int i = 0; i < this.TablaComida.getRowCount(); i++) {
             String nombre = this.tablaModelo.getValueAt(i, 0).toString();
             String detalle = this.tablaModelo.getValueAt(i, 1).toString();
             String tipoComida = this.tablaModelo.getValueAt(i, 2).toString();
-            int calorias = Integer.parseInt(this.tablaModelo.getValueAt(i, 3).toString());
-            int idComida = Integer.parseInt(this.tablaModelo.getValueAt(i, 4).toString()); // Supongamos que la columna 4 contiene el idComida
+            String caloriasStr = this.tablaModelo.getValueAt(i, 3).toString();
+            String idComidaStr = this.tablaModelo.getValueAt(i, 4).toString(); // Supongamos que la columna 4 contiene el idComida
+
+            if (nombre.isEmpty() || detalle.isEmpty() || tipoComida.isEmpty() || caloriasStr.isEmpty() || idComidaStr.isEmpty()) {
+                todosCamposLlenos = false;
+                break; // Detener el bucle si al menos un campo está vacío
+            }
+
+            int calorias = Integer.parseInt(caloriasStr);
+            int idComida = Integer.parseInt(idComidaStr);
             comida = new Comida(nombre, detalle, tipoComida, calorias, idComida);
 
             if (comidaData.modificarComida(comida)) {
@@ -611,14 +618,18 @@ public class GestionComidas extends javax.swing.JInternalFrame {
             }
         }
 
-        if (cont >= 1) {
-            JOptionPane.showMessageDialog(null, "La Comida se modificó correctamente");
+        if (todosCamposLlenos) {
+            if (cont >= 1) {
+                JOptionPane.showMessageDialog(null, "La Comida se modificó correctamente");
+            } else {
+                JOptionPane.showMessageDialog(null, "La comida no se pudo modificar");
+            }
         } else {
-            JOptionPane.showMessageDialog(null, "La comida no se pudo modificar");
+            JOptionPane.showMessageDialog(null, "Todos los campos deben estar completos");
         }
-        }catch(NullPointerException e){
-            JOptionPane.showMessageDialog(null, "Todos los campos deben estar completos "+e.getMessage());
-        }
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(null, "Error al convertir datos numéricos: " + e.getMessage());
+    }
     }//GEN-LAST:event_jbModificarActionPerformed
 
     private void jbAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbAgregarActionPerformed
